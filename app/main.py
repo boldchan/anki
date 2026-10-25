@@ -6,6 +6,7 @@ Optional sync with your own anki-syncserver: see data/sync.json (README in the r
 Run:  uvicorn main:app --host 0.0.0.0 --port 8000     (trusted network only!)
 """
 import os
+from pathlib import Path
 import threading
 from contextlib import asynccontextmanager
 
@@ -36,8 +37,8 @@ app.include_router(media_router)
 app.include_router(deck_router)
 app.include_router(study_router)
 
-os.makedirs("static", exist_ok=True)
-app.mount("/static", StaticFiles(directory="static"), name="static")
+BASE = Path(__file__).parent
+app.mount("/static", StaticFiles(directory=BASE / "static"), name="static")
 
 
 @app.exception_handler(NeedUser)

@@ -1,0 +1,1 @@
+rsync -avz --delete --exclude-from=.rsync-exclude ./ peng@raspberrypi.local:~/anki-web-server/

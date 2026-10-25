@@ -11,8 +11,7 @@ import time
 
 from anki.collection import Collection
 
-from app.config import FULL_DOWNLOAD, FULL_SYNC, FULL_UPLOAD
-from app.main import SYNC_FILE
+from app.config import FULL_DOWNLOAD, FULL_SYNC, FULL_UPLOAD, SYNC_FILE
 from app.sessions import Session
 
 

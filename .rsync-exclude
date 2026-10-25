@@ -1,0 +1,10 @@
+/data/
+/data-dev/
+/sync-dev/
+/.venv/
+__pycache__/
+.git/
+/static/htmx.min.js
+.DS_Store
+.env
+/tests/

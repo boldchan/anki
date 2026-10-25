@@ -5,7 +5,6 @@ from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse
 
 from app.config import NAME_RE, USERS_DIR
-from app.main import app
 from app.sessions import open_session, valid_user
 from app.sync import sync_now
 from app.templating import templates
@@ -37,7 +36,7 @@ def login(name: str) -> HTMLResponse:
     return resp
 
 
-@app.post("/newuser", response_class=HTMLResponse)
+@router.post("/newuser", response_class=HTMLResponse)
 async def newuser(request: Request):
     form = parse_qs((await request.body()).decode())
     name = (form.get("name") or [""])[0].strip()
@@ -47,7 +46,7 @@ async def newuser(request: Request):
     return login(name)
 
 
-@app.post("/logout", response_class=HTMLResponse)
+@router.post("/logout", response_class=HTMLResponse)
 def logout() -> HTMLResponse:
     resp = HTMLResponse(user_picker())
     resp.delete_cookie("user")
