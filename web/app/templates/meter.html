@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>录入读数</h2>
+<form hx-post="/readings" hx-target="#msg" hx-swap="innerHTML">
+  <label>读数 (kWh)
+    <input name="kwh" type="number" step="0.1" min="0" required>
+  </label>
+  <label>时间
+    <input name="ts" type="datetime-local" value="{{ now }}">
+  </label>
+  <button>保存</button>
+</form>
+<div id="msg"></div>
+
+<h2>历史记录</h2>
+<label>显示最近
+  <select id="days" name="days">
+    {% for d in day_options %}
+    <option value="{{ d }}" {{ "selected" if d == default_days }}>{{ d }} 天</option>
+    {% endfor %}
+  </select>
+</label>
+<div id="history"
+     hx-get="/history"
+     hx-include="#days"
+     hx-trigger="load, change from:#days, readings-changed from:body"></div>
+{% endblock %}

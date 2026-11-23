@@ -1,0 +1,19 @@
+{% if not rows %}
+<p>过去 {{ days }} 天没有记录。</p>
+{% else %}
+<p>过去 {{ days }} 天共 {{ rows|length }} 条记录，期间用电约 <b>{{ "%.1f"|format(total) }} kWh</b></p>
+<table>
+  <thead>
+    <tr><th>时间</th><th>读数 (kWh)</th><th>较上次</th></tr>
+  </thead>
+  <tbody>
+    {% for r in rows %}
+    <tr>
+      <td>{{ r.ts.replace("T", " ") }}</td>
+      <td>{{ "%.1f"|format(r.kwh) }}</td>
+      <td>{% if r.delta is not none %}{{ "%+.1f"|format(r.delta) }}{% endif %}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}

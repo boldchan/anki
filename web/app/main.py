@@ -20,6 +20,7 @@ from app.routes.media import router as media_router
 from app.routes.study import router as study_router
 from app.routes.sync import router as sync_router
 from app.routes.users import router as user_router
+from app.routes.meter import router as meter_router
 from app.sessions import close_all_sessions
 from app.stats import stats_loop
 
@@ -36,6 +37,7 @@ app.include_router(sync_router)
 app.include_router(media_router)
 app.include_router(deck_router)
 app.include_router(study_router)
+app.include_router(meter_router)
 
 BASE = Path(__file__).parent
 app.mount("/static", StaticFiles(directory=BASE / "static"), name="static")
