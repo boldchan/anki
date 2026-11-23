@@ -1,0 +1,12 @@
+<div id="reading" {% if oob %}hx-swap-oob="true"{% endif %}>
+  {% if latest %}
+  <div class="odo" role="img" aria-label="当前读数 {{ '%.1f'|format(latest.kwh) }} 千瓦时">
+    {% for d in digits %}<span class="d">{{ d }}</span>{% endfor %}
+    <span class="dot">.</span><span class="d dec">{{ dec }}</span>
+    <span class="unit">kWh</span>
+  </div>
+  <span class="lbl">最近一次录入 · {{ latest.ts.replace("T", " ") }}</span>
+  {% else %}
+  <p class="empty">还没有读数，请先录入。</p>
+  {% endif %}
+</div>

@@ -1,0 +1,12 @@
+<div id="stats" class="card stats" {% if oob %}hx-swap-oob="true"{% endif %}>
+  <div>
+    <span class="lbl">近 {{ days }} 天用电</span>
+    <span class="big num">{{ "%.1f"|format(total) }}</span>
+    <span class="lbl">kWh</span>
+  </div>
+  <div>
+    <span class="lbl">日均用电</span>
+    <span class="big num">{{ "%.1f"|format(avg) }}</span>
+    <span class="lbl">kWh / 天</span>
+  </div>
+</div>

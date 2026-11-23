@@ -1,19 +1,29 @@
+{# 主体：历史表格（替换 #history） #}
 {% if not rows %}
-<p>过去 {{ days }} 天没有记录。</p>
+<p class="empty">过去 {{ days }} 天没有记录。</p>
 {% else %}
-<p>过去 {{ days }} 天共 {{ rows|length }} 条记录，期间用电约 <b>{{ "%.1f"|format(total) }} kWh</b></p>
-<table>
-  <thead>
-    <tr><th>时间</th><th>读数 (kWh)</th><th>较上次</th></tr>
-  </thead>
-  <tbody>
-    {% for r in rows %}
-    <tr>
-      <td>{{ r.ts.replace("T", " ") }}</td>
-      <td>{{ "%.1f"|format(r.kwh) }}</td>
-      <td>{% if r.delta is not none %}{{ "%+.1f"|format(r.delta) }}{% endif %}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<div class="scroll">
+  <table>
+    <thead>
+      <tr><th>时间</th><th>读数 (kWh)</th><th class="r">较上次</th></tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+      <tr>
+        <td>{{ r.ts[5:].replace("T", " ") }}</td>
+        <td class="num">{{ "%.1f"|format(r.kwh) }}</td>
+        <td class="num r {{ 'neg' if r.delta is not none and r.delta < 0 else 'pos' }}">
+          {% if r.delta is not none %}{{ "%+.1f"|format(r.delta) }}{% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<p class="lbl">共 {{ rows|length }} 条记录</p>
 {% endif %}
+
+{# 以下三块通过 hx-swap-oob 同步更新页面其他位置 #}
+{% include "_reading.html" %}
+{% include "_stats.html" %}
+{% include "_chart.html" %}

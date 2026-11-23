@@ -1,0 +1,25 @@
+<section id="chart" class="card" {% if oob %}hx-swap-oob="true"{% endif %}>
+  <div class="card-head">
+    <h2>读数趋势</h2>
+    <span class="lbl">近 {{ days }} 天 · 增加 <span class="num ink">{{ "%.1f"|format(total) }}</span> kWh</span>
+  </div>
+  {% if chart %}
+  <svg class="chart" viewBox="0 0 {{ chart.w }} {{ chart.h }}" role="img"
+       aria-label="近 {{ days }} 天电表读数折线图，从 {{ chart.first_value }} 千瓦时变化到 {{ chart.last_value }} 千瓦时">
+    {% for y, label in chart.yticks %}
+    <line class="grid" x1="{{ chart.x0 }}" y1="{{ y }}" x2="{{ chart.x1 }}" y2="{{ y }}"/>
+    <text class="tick" x="{{ chart.x0 - 10 }}" y="{{ y + 4 }}" text-anchor="end">{{ label }}</text>
+    {% endfor %}
+    <line class="axis" x1="{{ chart.x0 }}" y1="{{ chart.y1 }}" x2="{{ chart.x1 }}" y2="{{ chart.y1 }}"/>
+    {% for x, label in chart.xticks %}
+    <text class="tick" x="{{ x }}" y="{{ chart.y1 + 22 }}" text-anchor="middle">{{ label }}</text>
+    {% endfor %}
+    <polygon class="area" points="{{ chart.area }}"/>
+    <polyline class="line" points="{{ chart.line }}"/>
+    <circle class="dot-end" cx="{{ chart.last.0 }}" cy="{{ chart.last.1 }}" r="6"/>
+    <text class="tick-strong" x="{{ chart.last.0 - 12 }}" y="{{ chart.last.2 }}" text-anchor="end">{{ chart.last.3 }}</text>
+  </svg>
+  {% else %}
+  <p class="empty">所选时间段内至少需要 2 条记录才能绘制趋势图。</p>
+  {% endif %}
+</section>

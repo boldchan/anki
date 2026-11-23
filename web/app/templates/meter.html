@@ -1,28 +1,59 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>录入读数</h2>
-<form hx-post="/readings" hx-target="#msg" hx-swap="innerHTML">
-  <label>读数 (kWh)
-    <input name="kwh" type="number" step="0.1" min="0" required>
-  </label>
-  <label>时间
-    <input name="ts" type="datetime-local" value="{{ now }}">
-  </label>
-  <button>保存</button>
-</form>
-<div id="msg"></div>
+<div class="page">
 
-<h2>历史记录</h2>
-<label>显示最近
-  <select id="days" name="days">
-    {% for d in day_options %}
-    <option value="{{ d }}" {{ "selected" if d == default_days }}>{{ d }} 天</option>
-    {% endfor %}
-  </select>
-</label>
-<div id="history"
-     hx-get="/history"
-     hx-include="#days"
-     hx-trigger="load, change from:#days, readings-changed from:body"></div>
+  <header class="top">
+    <div class="brand">
+      <div class="logo">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>
+      </div>
+      <h1>电表读数</h1>
+    </div>
+    <span class="lbl">{{ today }}</span>
+  </header>
+
+  <section class="row">
+    <div class="card hero">
+      <span class="lbl">当前读数</span>
+      {% include "_reading.html" %}
+    </div>
+    {% include "_stats.html" %}
+  </section>
+
+  <section class="row top-aligned">
+    <div class="card form-card">
+      <h2>录入读数</h2>
+      <form class="entry" hx-post="/readings" hx-target="#msg" hx-swap="innerHTML">
+        <label>
+          <span class="lbl">读数 (kWh)</span>
+          <input class="in" name="kwh" type="number" step="0.1" min="0" required placeholder="例如 1012.3">
+        </label>
+        <label>
+          <span class="lbl">时间</span>
+          <input class="in" name="ts" type="datetime-local" value="{{ now }}">
+        </label>
+        <button class="btn" type="submit">保存读数</button>
+      </form>
+      <div id="msg" aria-live="polite"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h2>历史记录</h2>
+        <form class="segmented" hx-get="/history" hx-target="#history"
+              hx-trigger="load, change, readings-changed from:body">
+          {% for d in day_options %}
+          <input type="radio" name="days" value="{{ d }}" id="days-{{ d }}" {{ "checked" if d == days }}>
+          <label for="days-{{ d }}">{{ d }} 天</label>
+          {% endfor %}
+        </form>
+      </div>
+      <div id="history"></div>
+    </div>
+  </section>
+
+  {% include "_chart.html" %}
+
+</div>
 {% endblock %}
